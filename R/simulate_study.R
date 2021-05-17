@@ -1,39 +1,42 @@
-
-simulate_study <- function(n_max, theta, a, b, r, epsilon, delta, n_draws) {
+#' Simulate a study
+#' @param n_max The number of subjects to stop after.
+#' @param theta A vector of true event probabilities in each arm.
+#' @param a A vector of "a" parameters for the beta prior.
+#' @param b A vector of "b" parameters for the beta prior.
+#' @param rule Treatment allocation rule to use.
+#' @param n_draws The number of draws to sample from the posterior for
+#'   evaluating posterior probabilities.
+#' @importFrom purrr %||%
+#' @export
+#' @examples
+#' result <- simulate_study(
+#'   n_max = 240,
+#'   theta = 0.2 + 1:4 / 10,
+#'   a = rep_len(1, 4),
+#'   b = rep_len(1, 4),
+#'   rule = rule_1(epsilon = 0.1)
+#' )
+simulate_study <- function(n_max, theta, a, b, rule, n_draws = 3000) {
   # Initialize list to hold tracked parameters at each step.
   trace <- vector("list", n_max + 1)
 
-  n_arms <- length(theta)
-  n <- 0 # Current index in randomization list, after skipping dormant arms.
+  rule <- rule_initialize(rule, n_arms = length(theta), n_max = n_max)
 
   for (i in seq_len(n_max + 1)) {
     # Draw samples from posterior
-    samples <- mapply(stats::rbeta, n_draws, a, b)
+    posterior_samples <- mapply(stats::rbeta, n_draws, a, b)
 
-    # For each arm, probability that it's best
-    p <- pr_max_col(samples)
-
-    # Update arm activity indicators
-    I <- p > epsilon
-
-    # For reference arm, use protective delta
-    if (delta != 0) {
-      samples[, 1] <- samples[, 1] + delta
-      I[1] <- pr_max_col(samples)[1] > epsilon
-    }
+    # Evaluate treatment allocation rule
+    rule <- rule_evaluate(rule, posterior_samples)
 
     # Save tracked parameters
-    trace[[i]] <- list(a = a, b = b, p = p, I = I)
+    trace[[i]] <- c(list(a = a, b = b), rule$result)
 
     if (i > n_max) {
-      break # Don't observe any more data
+      break # Stop before observing more data
     }
 
-    # Find next active arm
-    n <- n + 1
-    while (!I[A <- r[n]]) {
-      n <- n + 1
-    }
+    A <- rule_next_allocation(rule)
 
     # Observe data
     d <- rbern(1, theta[A])
