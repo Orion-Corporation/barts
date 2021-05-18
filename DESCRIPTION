@@ -21,3 +21,7 @@ LinkingTo:
 SystemRequirements: C++11
 Imports: 
     purrr
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
