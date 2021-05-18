@@ -3,7 +3,14 @@
 
 #' @export
 new_rule <- function(parameters = list(), state = list(), class = character()) {
-  structure(list(parameters = parameters, state = state), class = c(class, "bat_rule"))
+  structure(
+    list(
+      parameters = parameters,
+      state = state,
+      result = list()
+    ),
+    class = c(class, "bat_rule")
+  )
 }
 
 #' @export
@@ -72,35 +79,52 @@ rule_evaluate <- function(rule, samples) {
 
 #' @export
 rule_evaluate.bat_randomization_list <- function(rule, samples) {
+  rule <- NextMethod()
+
   n <- rule$state$n
   A <- rule$parameters$r[n]
   rule$state$n <- n + 1L
 
-  rule$result <- list(A = A)
-  rule
+  rule_add_result(rule, A = A)
 }
 
 #' @export
 rule_evaluate.bat_random_allocation <- function(rule, samples) {
+  rule <- NextMethod()
+
   p <- rule$parameters$p
   A <- sample(seq_along(p), 1, prob = p)
 
-  rule$result <- list(A = A)
-  rule
+  rule_add_result(rule, A = A)
 }
 
 #' @export
 rule_evaluate.bat_thompson <- function(rule, samples) {
-  # For each arm, probability that it's best
-  p <- pr_max_col(samples)
-  A <- sample(seq_along(p), 1, prob = p^rule$parameters$kappa)
+  rule <- NextMethod()
 
-  rule$result <- list(p = p, A = A)
-  rule
+  p <- rule$result$p
+  k <- rule$parameters$kappa
+  A <- sample(seq_along(p), 1, prob = p^k)
+
+  rule_add_result(rule, A = A)
+}
+
+#' @export
+rule_evaluate.bat_rule <- function(rule, samples) {
+  # Find default statistics that should always be included
+  rule_add_result(rule,
+    p = pr_max_col(samples),
+    I = rep_len(TRUE, ncol(samples))
+  )
 }
 
 
 # Helpers -----------------------------------------------------------------
+
+rule_add_result <- function(rule, ...) {
+  rule$result <- purrr::list_modify(rule$result, ...)
+  rule
+}
 
 rule_next_allocation <- function(rule) {
   if (is.null(rule$result)) {
