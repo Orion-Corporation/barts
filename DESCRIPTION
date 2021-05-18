@@ -6,8 +6,9 @@ Authors@R:
              family = "Marttila",
              role = c("aut", "cre"),
              email = "mikko.marttila@orionpharma.com"),
-      person(given = "Orion Corporation",
-             role = "cph"))
+      person("Elja", "Arjas", role = "aut"),
+      person("Dario", "Gasbarra", role = "aut"),
+      person(given = "Orion Corporation", role = "cph"))
 Maintainer: Mikko Marttila <mikko.marttila@orionpharma.com>
 Description: What the package does (one paragraph).
 License: file LICENSE

@@ -11,6 +11,12 @@ What the package does (one paragraph).
 \author{
 \strong{Maintainer}: Mikko Marttila \email{mikko.marttila@orionpharma.com}
 
+Authors:
+\itemize{
+  \item Elja Arjas
+  \item Dario Gasbarra
+}
+
 Other contributors:
 \itemize{
   \item Orion Corporation [copyright holder]
