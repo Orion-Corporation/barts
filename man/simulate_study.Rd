@@ -4,7 +4,16 @@
 \alias{simulate_study}
 \title{Simulate a study}
 \usage{
-simulate_study(n_max, theta, a, b, rule, n_draws = 3000)
+simulate_study(
+  n_max,
+  theta,
+  a,
+  b,
+  rule,
+  n_draws = 3000,
+  n_burn_in = 0,
+  burn_in_rule = randomization_list()
+)
 }
 \arguments{
 \item{n_max}{The number of subjects to stop after.}
