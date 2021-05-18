@@ -16,27 +16,38 @@
 #'   b = rep_len(1, 4),
 #'   rule = rule_1(epsilon = 0.1)
 #' )
-simulate_study <- function(n_max, theta, a, b, rule, n_draws = 3000) {
+simulate_study <- function(n_max, theta, a, b, rule, n_draws = 3000,
+                           n_burn_in = 0, burn_in_rule = randomization_list()) {
   # Initialize list to hold tracked parameters at each step.
   trace <- vector("list", n_max + 1)
 
-  rule <- rule_initialize(rule, n_arms = length(theta), n_max = n_max)
+  rules <- list(burn_in_rule, rule)
+  rules <- lapply(rules, rule_initialize, n_arms = length(theta), n_max = n_max)
+
+  active_rule <- rules[[1L]]
+  rule_updated <- FALSE
 
   for (i in seq_len(n_max + 1)) {
+    # Swap allocation rule after burn-in period
+    if (i > n_burn_in && !rule_updated) {
+      active_rule <- rules[[2L]]
+      rule_updated <- TRUE
+    }
+
     # Draw samples from posterior
     posterior_samples <- mapply(stats::rbeta, n_draws, a, b)
 
     # Evaluate treatment allocation rule
-    rule <- rule_evaluate(rule, posterior_samples)
+    active_rule <- rule_evaluate(active_rule, posterior_samples)
 
     # Save tracked parameters
-    trace[[i]] <- c(list(a = a, b = b), rule$result)
+    trace[[i]] <- c(list(a = a, b = b), active_rule$result)
 
     if (i > n_max) {
       break # Stop before observing more data
     }
 
-    A <- rule_next_allocation(rule)
+    A <- rule_next_allocation(active_rule)
 
     # Observe data
     d <- rbern(1, theta[A])
