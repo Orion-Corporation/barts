@@ -14,11 +14,6 @@ new_rule <- function(parameters = list(), state = list(), class = character()) {
 }
 
 #' @export
-thompson <- function(kappa) {
-  new_rule(parameters = list(kappa = kappa), class = "bat_thompson")
-}
-
-#' @export
 randomization_list <- function(randomization_list = NULL) {
   new_rule(
     parameters = list(r = randomization_list),
@@ -30,6 +25,11 @@ randomization_list <- function(randomization_list = NULL) {
 #' @export
 random_allocation <- function(p = NULL) {
   new_rule(parameters = list(p = p), class = "bat_random_allocation")
+}
+
+#' @export
+thompson <- function(kappa) {
+  new_rule(parameters = list(kappa = kappa), class = "bat_thompson")
 }
 
 
@@ -78,6 +78,15 @@ rule_evaluate <- function(rule, samples) {
 }
 
 #' @export
+rule_evaluate.bat_rule <- function(rule, samples) {
+  # Find default statistics that should always be included
+  rule_add_result(rule,
+    p = pr_max_col(samples),
+    I = rep_len(TRUE, ncol(samples))
+  )
+}
+
+#' @export
 rule_evaluate.bat_randomization_list <- function(rule, samples) {
   rule <- NextMethod()
 
@@ -109,15 +118,6 @@ rule_evaluate.bat_thompson <- function(rule, samples) {
   rule_add_result(rule, A = A)
 }
 
-#' @export
-rule_evaluate.bat_rule <- function(rule, samples) {
-  # Find default statistics that should always be included
-  rule_add_result(rule,
-    p = pr_max_col(samples),
-    I = rep_len(TRUE, ncol(samples))
-  )
-}
-
 
 # Helpers -----------------------------------------------------------------
 
@@ -127,7 +127,7 @@ rule_add_result <- function(rule, ...) {
 }
 
 rule_next_allocation <- function(rule) {
-  if (is.null(rule$result)) {
+  if (is.null(rule$result$A)) {
     stop(call. = FALSE, "Rule has not been evaluated yet.")
   } else {
     rule$result$A
