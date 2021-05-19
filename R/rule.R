@@ -133,3 +133,5 @@ rule_next_allocation <- function(rule) {
     rule$result$A
   }
 }
+
+is_rule <- function(x) inherits(x, "bat_rule")

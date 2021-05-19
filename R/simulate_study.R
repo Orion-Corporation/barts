@@ -28,9 +28,19 @@ simulate_study <- function(n_max, theta, a, b, rule, n_draws = 3000,
   # Validate input parameters
   c(theta, a, b) %<-% vctrs::vec_recycle_common(theta = theta, a = a, b = b)
 
+  theta <- vctrs::vec_cast(theta, double(), x_arg = "theta")
+  a <- vctrs::vec_cast(a, double(), x_arg = "a")
+  b <- vctrs::vec_cast(b, double(), x_arg = "b")
+
+  n_max <- vctrs::vec_cast(n_max, integer(), x_arg = "n_max")
+  n_draws <- vctrs::vec_cast(n_draws, integer(), x_arg = "n_draws")
+  n_burn_in <- vctrs::vec_cast(n_burn_in, integer(), x_arg = "n_burn_in")
+
+  stopifnot(is_rule(rule), is_rule(burn_in_rule))
+
   # Initialize list to hold tracked parameters at each step -- one step before
   # each subject and one after the last to evaluate the posterior in the end.
-  trace <- vector("list", n_max + 1)
+  trace <- vector("list", n_max + 1L)
 
   # Initialize allocation rules
   rules <- lapply(list(burn_in_rule, rule), function(r) {
@@ -41,7 +51,7 @@ simulate_study <- function(n_max, theta, a, b, rule, n_draws = 3000,
   active_rule <- rules[[1L]]
   rule_updated <- FALSE
 
-  for (i in seq_len(n_max + 1)) {
+  for (i in seq_len(n_max + 1L)) {
     # Swap allocation rule after burn-in period -- rules are passed by value
     # so need to make sure to only do this once rather than at each iteration.
     if (i > n_burn_in && !rule_updated) {
@@ -65,7 +75,7 @@ simulate_study <- function(n_max, theta, a, b, rule, n_draws = 3000,
     A <- rule_next_allocation(active_rule)
 
     # Observe data
-    d <- rbern(1, theta[A])
+    d <- rbern(1L, theta[A])
 
     # Update parameters
     a[A] <- a[A] + sum(d)
