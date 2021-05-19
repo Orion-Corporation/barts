@@ -1,5 +1,4 @@
 #include "cpp11.hpp"
-#include "Rmath.h"
 
 // For each column in a matrix of samples, determine the probability
 // that the sample in that column has the highest value on the row.
