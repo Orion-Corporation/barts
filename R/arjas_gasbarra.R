@@ -1,31 +1,14 @@
 
 # Definition --------------------------------------------------------------
 
+#' Allocate according to Arjas & Gasbarra's rule
+#'
+#' `arjas_gasbarra()` allows defining the general form introduced in Arjas &
+#' Gasbarra (2021). `rule_1()` and `rule_2()` provide convenient shortcuts to
+#' match the rules presented in the paper.
+#'
 #' @export
-rule_1 <- function(epsilon, delta = 0, randomization_list = NULL) {
-  arjas_gasbarra(
-    epsilon,
-    epsilon_1 = 0,
-    epsilon_2 = 0,
-    theta_low = NULL,
-    delta = delta,
-    randomization_list = randomization_list
-  )
-}
-
-#' @export
-rule_2 <- function(epsilon, epsilon_1, epsilon_2, theta_low, delta = 0, randomization_list = NULL) {
-  arjas_gasbarra(
-    epsilon,
-    epsilon_1 = epsilon_1,
-    epsilon_2 = epsilon_2,
-    theta_low = theta_low,
-    delta = delta,
-    randomization_list = randomization_list
-  )
-}
-
-#' @export
+#' @family allocation rules
 arjas_gasbarra <- function(epsilon, epsilon_1, epsilon_2, theta_low, delta, randomization_list = NULL) {
   new_rule(
     parameters = list(
@@ -41,6 +24,32 @@ arjas_gasbarra <- function(epsilon, epsilon_1, epsilon_2, theta_low, delta, rand
       dropped = integer()  # Indices of permanently dropped arms so far
     ),
     class = "bat_arjas_gasbarra"
+  )
+}
+
+#' @rdname arjas_gasbarra
+#' @export
+rule_1 <- function(epsilon, delta = 0, randomization_list = NULL) {
+  arjas_gasbarra(
+    epsilon,
+    epsilon_1 = 0,
+    epsilon_2 = 0,
+    theta_low = NULL,
+    delta = delta,
+    randomization_list = randomization_list
+  )
+}
+
+#' @rdname arjas_gasbarra
+#' @export
+rule_2 <- function(epsilon, epsilon_1, epsilon_2, theta_low, delta = 0, randomization_list = NULL) {
+  arjas_gasbarra(
+    epsilon,
+    epsilon_1 = epsilon_1,
+    epsilon_2 = epsilon_2,
+    theta_low = theta_low,
+    delta = delta,
+    randomization_list = randomization_list
   )
 }
 

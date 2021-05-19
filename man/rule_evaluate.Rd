@@ -7,7 +7,7 @@
 rule_evaluate(rule, samples)
 }
 \arguments{
-\item{rule}{A treatment allocation rule.}
+\item{rule}{A treatment allocation \link{rule}.}
 
 \item{samples}{A matrix of samples from the posterior distribution of the
 parameter of interest, with a column for each treatment arm.}

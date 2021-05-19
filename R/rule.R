@@ -13,7 +13,9 @@ new_rule <- function(parameters = list(), state = list(), class = character()) {
   )
 }
 
+#' Allocate by a pre-defined randomization list
 #' @export
+#' @family allocation rules
 randomization_list <- function(randomization_list = NULL) {
   new_rule(
     parameters = list(r = randomization_list),
@@ -22,12 +24,21 @@ randomization_list <- function(randomization_list = NULL) {
   )
 }
 
+#' Allocate randomly with a given probability
 #' @export
+#' @family allocation rules
 random_allocation <- function(p = NULL) {
   new_rule(parameters = list(p = p), class = "bat_random_allocation")
 }
 
+#' Allocate according to Thompson's rule
+#'
+#' The randomization probability for each arm is determined by raising the
+#' posterior probability of that arm being the best studied arm to the power
+#' `kappa` given as a parameter.
+#'
 #' @export
+#' @family allocation rules
 thompson <- function(kappa) {
   new_rule(parameters = list(kappa = kappa), class = "bat_thompson")
 }
@@ -69,9 +80,10 @@ rule_initialize.bat_random_allocation <- function(rule, ..., n_arms) {
 #' An implementation must populate the rule with the `$result` element,
 #' including at least the next allocation in `$result$A`.
 #'
-#' @param rule A treatment allocation rule.
+#' @param rule A treatment allocation [rule].
 #' @param samples A matrix of samples from the posterior distribution of the
 #'   parameter of interest, with a column for each treatment arm.
+#'
 #' @export
 rule_evaluate <- function(rule, samples) {
   UseMethod("rule_evaluate")
