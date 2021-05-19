@@ -21,7 +21,9 @@ LinkingTo:
     cpp11
 SystemRequirements: C++11
 Imports: 
-    purrr
+    purrr,
+    vctrs,
+    zeallot
 Suggests: 
     knitr,
     rmarkdown

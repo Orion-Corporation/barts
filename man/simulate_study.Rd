@@ -27,7 +27,12 @@ simulate_study(
 \item{rule}{Treatment allocation rule to use.}
 
 \item{n_draws}{The number of draws to sample from the posterior for
-evaluating posterior probabilities.}
+evaluating posterior probabilities in allocation rules.}
+
+\item{n_burn_in}{The number of subjects to allocate using \code{burn_in_rule} in
+the beginning before swapping to \code{rule}.}
+
+\item{burn_in_rule}{Allocation rule to use during the burn-in period.}
 }
 \description{
 Simulate a study
