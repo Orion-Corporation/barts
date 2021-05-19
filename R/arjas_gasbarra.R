@@ -61,21 +61,21 @@ rule_initialize.bat_arjas_gasbarra <- function(rule, ..., n_max, n_arms) {
 #' @export
 rule_evaluate.bat_arjas_gasbarra <- function(rule, samples) {
   # Determine arm state and statistics based on Arjas & Gasbarra (2021)
-  state <- ag_arm_state(rule, samples)
+  arm_state <- ag_state(rule, samples)
 
   # If requested, use protective delta for reference arm
   if (rule$parameters$delta != 0) {
     samples[, 1L] <- samples[, 1L] + rule$parameters$delta
-    state_with_delta <- ag_arm_state(rule, samples)
-    state[1L, ] <- state_with_delta[1L, ]
+    arm_state_with_delta <- ag_state(rule, samples)
+    arm_state[1L, ] <- arm_state_with_delta[1L, ]
   }
 
   # Keep track of potentially newly dropped arms
-  rule$state$dropped <- which(state[["dropped"]])
+  rule$state$dropped <- which(arm_state[["dropped"]])
 
   # Extract relevant statistics for further use
-  p <- state[["p_max"]]
-  I <- state[["I"]]
+  p <- arm_state[["p_max"]]
+  I <- arm_state[["I"]]
 
   # Find next active arm
   r <- rule$parameters$r
@@ -85,11 +85,10 @@ rule_evaluate.bat_arjas_gasbarra <- function(rule, samples) {
   }
   rule$state$n <- n + 1L
 
-  rule$result <- list(p = p, I = I, A = A)
-  rule
+  rule_add_result(rule, p = p, I = I, A = A)
 }
 
-ag_arm_state <- function(rule, samples) {
+ag_state <- function(rule, samples) {
   n_arms <- ncol(samples)
 
   # Indicator for arm being previously dropped
