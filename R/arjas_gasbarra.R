@@ -77,13 +77,20 @@ rule_evaluate.bat_arjas_gasbarra <- function(rule, samples) {
   p <- arm_state[["p_max"]]
   I <- arm_state[["I"]]
 
-  # Find next active arm
-  r <- rule$parameters$r
-  n <- rule$state$n
-  while (!I[A <- r[n]]) {
-    n <- n + 1L
+  # Determine next treatment allocation
+  if (!any(I)) {
+    # Avoid infinite loop if all arms are inactive. This could occur if
+    # dropping rules are configured badly, e.g. theta_low is too high.
+    A <- NA_integer_
+  } else {
+    # Find next active arm
+    r <- rule$parameters$r
+    n <- rule$state$n
+    while (!I[A <- r[n]]) {
+      n <- n + 1L
+    }
+    rule$state$n <- n + 1L
   }
-  rule$state$n <- n + 1L
 
   rule_add_result(rule, p = p, I = I, A = A)
 }
