@@ -22,6 +22,7 @@ LinkingTo:
 SystemRequirements: C++11
 Imports: 
     purrr,
+    rlang,
     vctrs,
     zeallot
 Suggests: 
