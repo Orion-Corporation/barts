@@ -71,11 +71,11 @@ rule_evaluate.bat_arjas_gasbarra <- function(rule, samples) {
   }
 
   # Keep track of potentially newly dropped arms
-  rule$state$dropped <- which(state[, "dropped"])
+  rule$state$dropped <- which(state[["dropped"]])
 
   # Extract relevant statistics for further use
-  p <- state[, "p_max"]
-  I <- state[, "I"]
+  p <- state[["p_max"]]
+  I <- state[["I"]]
 
   # Find next active arm
   r <- rule$parameters$r
@@ -115,5 +115,14 @@ ag_arm_state <- function(rule, samples) {
   # Combined activity indicator
   I <- !dormant & !dropped
 
-  data.frame(p_max, p_mrt, dormant, dropped, I)
+  new_data_frame(
+    list(
+      p_max = p_max,
+      p_mrt = p_mrt,
+      dormant = dormant,
+      dropped = dropped,
+      I = I
+    ),
+    nrow = n_arms
+  )
 }

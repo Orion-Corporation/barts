@@ -57,7 +57,7 @@ simulate_study <- function(n_max, theta, a, b, rule, n_draws = 3000,
     b[A] <- b[A] + sum(1 - d)
 
     # Save observed data
-    trace[[i]][["data"]] <- data.frame(A = A, d = d)
+    trace[[i]][["data"]] <- new_data_frame(list(A = A, d = d), nrow = 1L)
   }
 
   # Combine parameters into matrices across steps
