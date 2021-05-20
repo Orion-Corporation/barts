@@ -141,3 +141,12 @@ ag_state <- function(rule, samples) {
     nrow = n_arms
   )
 }
+
+
+# Plotting ----------------------------------------------------------------
+
+#' @export
+plot.bat_arjas_gasbarra <- function(x, ...) {
+  abline(h = x$parameters$epsilon, col = "grey", lty = 2)
+  abline(h = x$parameters$epsilon_2, col = "grey", lty = 1)
+}

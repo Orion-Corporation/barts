@@ -143,6 +143,14 @@ rule_evaluate.bat_thompson <- function(rule, samples) {
   rule_add_result(rule, A = A)
 }
 
+# Plotting ----------------------------------------------------------------
+
+#' @export
+plot.bat_rule <- function(x, ...) {
+  # A rule can define a plot method to make annotations on the plot showing the
+  # posterior probability of being the maximum. There is no default behavior.
+}
+
 
 # Helpers -----------------------------------------------------------------
 
