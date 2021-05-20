@@ -28,19 +28,20 @@ Here's an example using the full Rule 2 form from Arjas & Gasbarra (2021):
 set.seed(9082)
 epsilon <- 0.1
 
-results <- simulate_study(
-  n_max = 240,
-  theta = 0.2 + 1:4 / 10,
-  a = rep_len(1, 4),
-  b = rep_len(1, 4),
-  rule = rule_2(
-    epsilon = epsilon,
-    epsilon_1 = 0.10,
-    epsilon_2 = 0.05,
-    theta_low = 0.10,
-    delta = 0.1
+results <- simulate_phase(
+  phase(
+    n = 240,
+    rule = rule_2(
+      epsilon = epsilon,
+      epsilon_1 = 0.10,
+      epsilon_2 = 0.05,
+      theta_low = 0.10,
+      delta = 0.1
+    )
   ),
-  n_burn_in = 30
+  a = 1,
+  b = 1,
+  theta = 0.2 + 1:4 / 10
 )
 ```
 
@@ -98,13 +99,11 @@ rule with $\kappa = 0.75$ as the treatment allocation procedure:
 ```{r thompson}
 set.seed(1298)
 
-results <- simulate_study(
-  n_max = 240,
-  theta = 0.2 + 1:4 / 10,
-  a = rep_len(1, 4),
-  b = rep_len(1, 4),
-  rule = thompson(kappa = 0.75),
-  n_burn_in = 30
+results <- simulate_phase(
+  phase(n = 240, rule = thompson(kappa = 0.75)),
+  a = 1,
+  b = 1,
+  theta = 0.2 + 1:4 / 10
 )
 ```
 
