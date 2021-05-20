@@ -13,6 +13,7 @@ posterior probability of that arm being the best studied arm to the power
 }
 \seealso{
 Other allocation rules: 
+\code{\link{allocation_rule}},
 \code{\link{arjas_gasbarra}()},
 \code{\link{random_allocation}()},
 \code{\link{randomization_list}()}

@@ -11,6 +11,7 @@ Allocate randomly with a given probability
 }
 \seealso{
 Other allocation rules: 
+\code{\link{allocation_rule}},
 \code{\link{arjas_gasbarra}()},
 \code{\link{randomization_list}()},
 \code{\link{thompson}()}

@@ -11,6 +11,7 @@ Allocate by a pre-defined randomization list
 }
 \seealso{
 Other allocation rules: 
+\code{\link{allocation_rule}},
 \code{\link{arjas_gasbarra}()},
 \code{\link{random_allocation}()},
 \code{\link{thompson}()}

@@ -1,7 +1,20 @@
 
 # Definition --------------------------------------------------------------
 
+#' Create a new treatment allocation rule
+#'
+#' `new_rule()` is used as a base to create a new treatment allocation rule
+#' subclass. Define a [rule_evaluate()] method to implement functionality.
+#' The package's allocation rules are listed in the "See Also" section.
+#'
+#' @param parameters List of user-supplied parameters for the rule.
+#' @param state List of values the rule keeps track of over evaluations.
+#' @param class Name of the rule subclass to create.
+#'
 #' @export
+#' @name allocation_rule
+#' @aliases rule
+#' @family allocation rules
 new_rule <- function(parameters = list(), state = list(), class = character()) {
   structure(
     list(

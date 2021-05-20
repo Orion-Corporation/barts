@@ -33,6 +33,7 @@ match the rules presented in the paper.
 }
 \seealso{
 Other allocation rules: 
+\code{\link{allocation_rule}},
 \code{\link{random_allocation}()},
 \code{\link{randomization_list}()},
 \code{\link{thompson}()}
