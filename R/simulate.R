@@ -46,7 +46,6 @@ simulate_study <- function(phases, theta, a, b, n_draws = 3000) {
 #'   evaluating posterior probabilities in allocation rules.
 #'
 #' @seealso [simulate_study()] for simulating a multi-phase study.
-#' @importFrom purrr %||%
 #' @importFrom zeallot %<-%
 #' @export
 #'
