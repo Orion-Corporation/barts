@@ -51,15 +51,8 @@ simulate_study.bat_study <- function(study, theta, a, b, n_draws = 3000) {
   }
 
   names(results) <- names(study$phases)
-  results
+  new_study_result(results)
 }
-
-#' @export
-simulate_study.bat_single_phase_study <- function(study, theta, a, b, n_draws = 3000) {
-  results <- NextMethod()
-  results[[1L]]
-}
-
 
 #' @importFrom zeallot %<-%
 simulate_phase <- function(phase, theta, a, b, n_draws = 3000) {

@@ -146,7 +146,12 @@ ag_state <- function(rule, samples) {
 # Plotting ----------------------------------------------------------------
 
 #' @export
-plot.bat_arjas_gasbarra <- function(x, ...) {
-  abline(h = x$parameters$epsilon, col = "grey", lty = 2)
-  abline(h = x$parameters$epsilon_2, col = "grey", lty = 1)
+plot.bat_arjas_gasbarra <- function(x, ..., xlim = NULL) {
+  if (!is.null(xlim)) {
+    lines(xlim, rep(x$parameters$epsilon, 2), col = "grey", lty = 2)
+    lines(xlim, rep(x$parameters$epsilon_2, 2), col = "grey", lty = 1)
+  } else {
+    abline(h = x$parameters$epsilon, col = "grey", lty = 2)
+    abline(h = x$parameters$epsilon_2, col = "grey", lty = 1)
+  }
 }
