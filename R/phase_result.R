@@ -5,10 +5,11 @@ new_phase_result <- function(x, rule) {
 
 #' @export
 plot.bat_phase_result <- function(x, ...) {
-  op <- par(mfcol = c(2, 1))
+  op <- par()
   on.exit(par(op))
 
   with(x, {
+    par(mfcol = c(2, 1))
 
     # Posterior means
     mu <- a / (a + b)
