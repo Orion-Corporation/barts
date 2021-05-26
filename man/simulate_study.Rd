@@ -4,17 +4,14 @@
 \alias{simulate_study}
 \title{Simulate a study}
 \usage{
-simulate_study(phases, theta, a, b, n_draws = 3000)
+simulate_study(study, theta, a, b, n_draws = 3000)
 }
 \arguments{
-\item{phases}{A list of study \link{phase}s to simulate in sequence.}
+\item{study}{A \link{study} whose phases will be simulated in sequence.}
 
 \item{theta}{A vector of true event probabilities in each arm.}
 
-\item{a}{Vectors of parameters to the beta prior with elements for each
-arm. Recycled to match the length of \code{theta} if possible.}
-
-\item{b}{Vectors of parameters to the beta prior with elements for each
+\item{a, b}{Vectors of parameters to the beta prior with elements for each
 arm. Recycled to match the length of \code{theta} if possible.}
 
 \item{n_draws}{The number of draws to sample from the posterior for
@@ -24,16 +21,26 @@ evaluating posterior probabilities in allocation rules.}
 Simulate a study
 }
 \examples{
+# A single-phase study uses the same allocation rule throughout
 simulate_study(
-  phases = list(
-    burn_in  = phase(n = 40, rule = randomization_list()),
-    adaptive = phase(n = 240, rule = rule_1(epsilon = 0.1))
-  ),
+  single_phase_study(n = 240, rule = epsilon(0.1)),
+  a = 1,
+  b = 1,
+  theta = 0.2 + 1:4 / 10
+)
+
+# A multi-phase study can e.g. have a burn-in period with another rule
+simulate_study(
+  multi_phase_study(phases = list(
+    phase(n = 40, rule = randomization_list()),
+    phase(n = 200, rule = rule_1(epsilon = 0.1))
+  )),
   a = 1,
   b = 1,
   theta = 0.2 + 1:4 / 10
 )
 }
 \seealso{
-\code{\link[=simulate_phase]{simulate_phase()}} for simulating a single phase.
+\link{study} for options for study types. \code{\link[=phase]{phase()}} for defining study
+phases. \link{allocation_rule} for available rules for treatment allocation.
 }

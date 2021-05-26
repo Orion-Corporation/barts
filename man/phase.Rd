@@ -15,5 +15,5 @@ phase(n, rule)
 Define a study phase
 }
 \seealso{
-\code{\link[=simulate_phase]{simulate_phase()}} for generating simulated data for a phase.
+\link{study} which are formed from phases.
 }

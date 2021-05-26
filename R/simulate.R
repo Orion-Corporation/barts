@@ -1,27 +1,46 @@
 #' Simulate a study
 #'
-#' @param phases A list of study [phase]s to simulate in sequence.
-#' @inheritParams simulate_phase
+#' @param study A [study] whose phases will be simulated in sequence.
+#' @param theta A vector of true event probabilities in each arm.
+#' @param a,b Vectors of parameters to the beta prior with elements for each
+#'   arm. Recycled to match the length of `theta` if possible.
+#' @param n_draws The number of draws to sample from the posterior for
+#'   evaluating posterior probabilities in allocation rules.
 #'
-#' @seealso [simulate_phase()] for simulating a single phase.
+#' @seealso [study] for options for study types. [phase()] for defining study
+#'   phases. [allocation_rule] for available rules for treatment allocation.
 #' @export
 #'
 #' @examples
+#' # A single-phase study uses the same allocation rule throughout
 #' simulate_study(
-#'   phases = list(
-#'     burn_in  = phase(n = 40, rule = randomization_list()),
-#'     adaptive = phase(n = 240, rule = rule_1(epsilon = 0.1))
-#'   ),
+#'   single_phase_study(n = 240, rule = epsilon(0.1)),
 #'   a = 1,
 #'   b = 1,
 #'   theta = 0.2 + 1:4 / 10
 #' )
-simulate_study <- function(phases, theta, a, b, n_draws = 3000) {
+#'
+#' # A multi-phase study can e.g. have a burn-in period with another rule
+#' simulate_study(
+#'   multi_phase_study(phases = list(
+#'     phase(n = 40, rule = randomization_list()),
+#'     phase(n = 200, rule = rule_1(epsilon = 0.1))
+#'   )),
+#'   a = 1,
+#'   b = 1,
+#'   theta = 0.2 + 1:4 / 10
+#' )
+simulate_study <- function(study, theta, a, b, n_draws = 3000) {
+  UseMethod("simulate_study")
+}
+
+#' @export
+simulate_study.bat_study <- function(study, theta, a, b, n_draws = 3000) {
   # Track results from each phase
   results <- list()
 
   # Simulate each phase
-  for (phase in phases) {
+  for (phase in study$phases) {
     phase_result <- simulate_phase(phase, theta, a, b, n_draws)
 
     # Carry over posterior parameters to next phase
@@ -31,31 +50,18 @@ simulate_study <- function(phases, theta, a, b, n_draws = 3000) {
     results <- c(results, list(phase_result))
   }
 
-  names(results) <- names(phases)
+  names(results) <- names(study$phases)
   results
 }
 
-#' Simulate a study phase
-#'
-#' @param phase A [phase] defining the number of subjects to accrue and the
-#'   treatment allocation rule to use.
-#' @param theta A vector of true event probabilities in each arm.
-#' @param a,b Vectors of parameters to the beta prior with elements for each
-#'   arm. Recycled to match the length of `theta` if possible.
-#' @param n_draws The number of draws to sample from the posterior for
-#'   evaluating posterior probabilities in allocation rules.
-#'
-#' @seealso [simulate_study()] for simulating a multi-phase study.
-#' @importFrom zeallot %<-%
 #' @export
-#'
-#' @examples
-#' simulate_phase(
-#'   phase(n = 240, rule = random_allocation(p = 1:2)),
-#'   a = 1,
-#'   b = 1,
-#'   theta = c(0.3, 0.5)
-#' )
+simulate_study.bat_single_phase_study <- function(study, theta, a, b, n_draws = 3000) {
+  results <- NextMethod()
+  results[[1L]]
+}
+
+
+#' @importFrom zeallot %<-%
 simulate_phase <- function(phase, theta, a, b, n_draws = 3000) {
   # Validate input parameters
   c(theta, a, b) %<-% vctrs::vec_recycle_common(theta = theta, a = a, b = b)
