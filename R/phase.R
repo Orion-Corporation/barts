@@ -31,7 +31,7 @@ new_phase_result <- function(x, rule) {
 
 #' @export
 plot.bat_phase_result <- function(x, ...) {
-  op <- par()
+  op <- par(no.readonly = TRUE)
   on.exit(suppressWarnings(par(op)))
 
   with(x, {

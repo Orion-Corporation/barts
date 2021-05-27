@@ -31,7 +31,7 @@ new_study_result <- function(x) {
 
 #' @export
 plot.bat_study_result <- function(x, ...) {
-  op <- par()
+  op <- par(no.readonly = TRUE)
   on.exit(suppressWarnings(par(op)))
 
   # Find common plotting parameters across phases to start
