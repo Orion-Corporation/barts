@@ -10,6 +10,7 @@
 #' @export
 #' @family allocation rules
 arjas_gasbarra <- function(epsilon, epsilon_1, epsilon_2, theta_low, delta, randomization_list = NULL) {
+  theta_low <- vctrs::vec_cast(theta_low, double(), x_arg = "theta_low")
   new_rule(
     parameters = list(
       epsilon = epsilon,
@@ -34,7 +35,7 @@ rule_1 <- function(epsilon, delta = 0, randomization_list = NULL) {
     epsilon,
     epsilon_1 = 0,
     epsilon_2 = 0,
-    theta_low = NULL,
+    theta_low = NA,
     delta = delta,
     randomization_list = randomization_list
   )
@@ -42,7 +43,7 @@ rule_1 <- function(epsilon, delta = 0, randomization_list = NULL) {
 
 #' @rdname arjas_gasbarra
 #' @export
-rule_2 <- function(epsilon, epsilon_1, epsilon_2, theta_low, delta = 0, randomization_list = NULL) {
+rule_2 <- function(epsilon, epsilon_1, epsilon_2, theta_low = NA, delta = 0, randomization_list = NULL) {
   arjas_gasbarra(
     epsilon,
     epsilon_1 = epsilon_1,
@@ -115,7 +116,7 @@ ag_state <- function(rule, samples) {
   p_max <- replace(rep_len(0, n_arms), !dropped, p_max)
 
   # Probability of meeting minimum response theta_low
-  if (!is.null(rule$parameters$theta_low) && rule$parameters$epsilon_1 > 0) {
+  if (!is.na(rule$parameters$theta_low) && rule$parameters$epsilon_1 > 0) {
     p_mrt <- colMeans(samples > rule$parameters$theta_low)
   } else {
     p_mrt <- rep_len(1, n_arms)
