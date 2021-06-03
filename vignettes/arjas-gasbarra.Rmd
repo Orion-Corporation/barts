@@ -52,14 +52,18 @@ the probability of being the best (`p`), and the activity state (`I`).
 Included is also the rule's next suggested allocation (`A`) , as well as the
 simulated `data`. The used allocation rule is stored in the `"rule"` attribute.
 
-```{r rule-1-single-str}
+```{r single-study-results}
 str(results)
 ```
 
 The `plot()` method gives us a simple summary of a single phase's results:
 
-```{r rule-1-single-plot}
+```{r single-study-plot}
 plot(results)
 ```
+
+For determining the operating characteristics of a set of design parameters,
+we need to simulate multiple realizations of the same study. We'll do that for
+the combinations of design parameters and hypotheses under investigation.
 
 ## Simulating a 4-arm trial: Experiment 2
