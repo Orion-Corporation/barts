@@ -32,7 +32,7 @@ new_rule <- function(parameters = list(), state = list(), class = character()) {
 randomization_list <- function(randomization_list = NULL) {
   new_rule(
     parameters = list(r = randomization_list),
-    state = list(n = 1),
+    state = list(n = 1L),
     class = "bat_randomization_list"
   )
 }
@@ -142,6 +142,7 @@ rule_evaluate.bat_thompson <- function(rule, samples) {
 
   rule_add_result(rule, A = A)
 }
+
 
 # Plotting ----------------------------------------------------------------
 

@@ -101,7 +101,11 @@ simulate_phase <- function(phase, theta, a, b, n_draws = 3000) {
   }
 
   # Combine parameters into matrices across steps
-  results <- lapply(purrr::transpose(trace), purrr::partial(do.call, "rbind"))
+  results <- lapply(purrr::transpose(trace), rbindlist)
 
   new_phase_result(results, rule = rule)
+}
+
+rbindlist <- function(x) {
+  do.call("rbind", x)
 }

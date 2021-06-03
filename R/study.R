@@ -22,6 +22,7 @@ new_study <- function(phases = list(), class = character()) {
   structure(list(phases = phases), class = c(class, "bat_study"))
 }
 
+
 # Result ------------------------------------------------------------------
 
 new_study_result <- function(x) {
