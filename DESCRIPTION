@@ -11,7 +11,7 @@ Authors@R:
       person(given = "Orion Corporation", role = "cph"))
 Maintainer: Mikko Marttila <mikko.marttila@orionpharma.com>
 Description: What the package does (one paragraph).
-License: file LICENSE
+License: MIT + file LICENSE
 Copyright: Orion Corporation
 Encoding: UTF-8
 LazyData: true
