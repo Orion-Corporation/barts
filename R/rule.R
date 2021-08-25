@@ -22,7 +22,7 @@ new_rule <- function(parameters = list(), state = list(), class = character()) {
       state = state,
       result = list()
     ),
-    class = c(class, "bat_rule")
+    class = c(class, "barts_rule")
   )
 }
 
@@ -33,7 +33,7 @@ randomization_list <- function(randomization_list = NULL) {
   new_rule(
     parameters = list(r = randomization_list),
     state = list(n = 1L),
-    class = "bat_randomization_list"
+    class = "barts_randomization_list"
   )
 }
 
@@ -41,7 +41,7 @@ randomization_list <- function(randomization_list = NULL) {
 #' @export
 #' @family allocation rules
 random_allocation <- function(p = NULL) {
-  new_rule(parameters = list(p = p), class = "bat_random_allocation")
+  new_rule(parameters = list(p = p), class = "barts_random_allocation")
 }
 
 #' Allocate according to Thompson's rule
@@ -53,7 +53,7 @@ random_allocation <- function(p = NULL) {
 #' @export
 #' @family allocation rules
 thompson <- function(kappa) {
-  new_rule(parameters = list(kappa = kappa), class = "bat_thompson")
+  new_rule(parameters = list(kappa = kappa), class = "barts_thompson")
 }
 
 
@@ -64,10 +64,10 @@ rule_initialize <- function(rule, ...) {
 }
 
 #' @export
-rule_initialize.bat_rule <- function(rule, ...) rule
+rule_initialize.barts_rule <- function(rule, ...) rule
 
 #' @export
-rule_initialize.bat_randomization_list <- function(rule, ..., n_max, n_arms) {
+rule_initialize.barts_randomization_list <- function(rule, ..., n_max, n_arms) {
   if (is.null(rule$parameters$r)) {
     rule$parameters$r <- replicate(n_max, sample(n_arms))
   }
@@ -76,7 +76,7 @@ rule_initialize.bat_randomization_list <- function(rule, ..., n_max, n_arms) {
 
 #' @export
 #' @importFrom purrr %||%
-rule_initialize.bat_random_allocation <- function(rule, ..., n_arms) {
+rule_initialize.barts_random_allocation <- function(rule, ..., n_arms) {
   # Ensure randomization probabilities sum to one
   p <- rule$parameters$p %||% rep_len(1, n_arms)
   rule$parameters$p <- prop.table(p)
@@ -102,7 +102,7 @@ rule_evaluate <- function(rule, samples) {
 }
 
 #' @export
-rule_evaluate.bat_rule <- function(rule, samples) {
+rule_evaluate.barts_rule <- function(rule, samples) {
   # Find default statistics that should always be included
   rule_add_result(rule,
     p = pr_max_col(samples),
@@ -111,7 +111,7 @@ rule_evaluate.bat_rule <- function(rule, samples) {
 }
 
 #' @export
-rule_evaluate.bat_randomization_list <- function(rule, samples) {
+rule_evaluate.barts_randomization_list <- function(rule, samples) {
   rule <- NextMethod()
 
   n <- rule$state$n
@@ -122,7 +122,7 @@ rule_evaluate.bat_randomization_list <- function(rule, samples) {
 }
 
 #' @export
-rule_evaluate.bat_random_allocation <- function(rule, samples) {
+rule_evaluate.barts_random_allocation <- function(rule, samples) {
   rule <- NextMethod()
 
   p <- rule$parameters$p
@@ -132,7 +132,7 @@ rule_evaluate.bat_random_allocation <- function(rule, samples) {
 }
 
 #' @export
-rule_evaluate.bat_thompson <- function(rule, samples) {
+rule_evaluate.barts_thompson <- function(rule, samples) {
   rule <- NextMethod()
 
   p <- rule$result$p
@@ -146,7 +146,7 @@ rule_evaluate.bat_thompson <- function(rule, samples) {
 # Plotting ----------------------------------------------------------------
 
 #' @export
-plot.bat_rule <- function(x, ...) {
+plot.barts_rule <- function(x, ...) {
   # A rule can define a plot method to make annotations on the plot showing the
   # posterior probability of being the maximum. There is no default behavior.
 }
@@ -167,4 +167,4 @@ rule_next_allocation <- function(rule) {
   }
 }
 
-is_rule <- function(x) inherits(x, "bat_rule")
+is_rule <- function(x) inherits(x, "barts_rule")

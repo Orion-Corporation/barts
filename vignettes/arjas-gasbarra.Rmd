@@ -19,14 +19,14 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(bat)
+library(barts)
 set.seed(20210520)
 ```
 
 ## Simulating a 2-arm trial: Experiment 1
 
 Section 3.1.1 investigates the effect of different parameter combinations in Rule 1.
-With {bat}, we can easily define the parameter combinations under investigation:
+With {barts}, we can easily define the parameter combinations under investigation:
 
 ```{r parameters}
 rules <- list(

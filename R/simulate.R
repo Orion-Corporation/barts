@@ -35,7 +35,7 @@ simulate_study <- function(study, theta, a, b, n_draws = 3000) {
 }
 
 #' @export
-simulate_study.bat_study <- function(study, theta, a, b, n_draws = 3000) {
+simulate_study.barts_study <- function(study, theta, a, b, n_draws = 3000) {
   # Track results from each phase
   results <- list()
 

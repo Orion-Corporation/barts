@@ -6,7 +6,7 @@
 
 // pr_max_col.cpp
 cpp11::doubles pr_max_col(cpp11::doubles_matrix m);
-extern "C" SEXP _bat_pr_max_col(SEXP m) {
+extern "C" SEXP _barts_pr_max_col(SEXP m) {
   BEGIN_CPP11
     return cpp11::as_sexp(pr_max_col(cpp11::as_cpp<cpp11::decay_t<cpp11::doubles_matrix>>(m)));
   END_CPP11
@@ -14,15 +14,15 @@ extern "C" SEXP _bat_pr_max_col(SEXP m) {
 
 extern "C" {
 /* .Call calls */
-extern SEXP _bat_pr_max_col(SEXP);
+extern SEXP _barts_pr_max_col(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_bat_pr_max_col", (DL_FUNC) &_bat_pr_max_col, 1},
+    {"_barts_pr_max_col", (DL_FUNC) &_barts_pr_max_col, 1},
     {NULL, NULL, 0}
 };
 }
 
-extern "C" void R_init_bat(DllInfo* dll){
+extern "C" void R_init_barts(DllInfo* dll){
   R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
   R_useDynamicSymbols(dll, FALSE);
   R_forceSymbols(dll, TRUE);

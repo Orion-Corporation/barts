@@ -1,5 +1,5 @@
 #' @keywords internal
-#' @useDynLib bat, .registration = TRUE
+#' @useDynLib barts, .registration = TRUE
 "_PACKAGE"
 
 # The following block is used by usethis to automatically manage

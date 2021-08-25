@@ -7,7 +7,7 @@ NULL
 #' @rdname study
 #' @export
 single_phase_study <- function(...) {
-  new_study(list(phase(...)), class = "bat_single_phase_study")
+  new_study(list(phase(...)), class = "barts_single_phase_study")
 }
 
 #' @param phases A list of [phase]s that form the study.
@@ -15,11 +15,11 @@ single_phase_study <- function(...) {
 #' @export
 multi_phase_study <- function(phases = list()) {
   stopifnot(all_are_phases(phases))
-  new_study(phases, class = "bat_multi_phase_study")
+  new_study(phases, class = "barts_multi_phase_study")
 }
 
 new_study <- function(phases = list(), class = character()) {
-  structure(list(phases = phases), class = c(class, "bat_study"))
+  structure(list(phases = phases), class = c(class, "barts_study"))
 }
 
 
@@ -27,11 +27,11 @@ new_study <- function(phases = list(), class = character()) {
 
 new_study_result <- function(x) {
   stopifnot(is.list(x)) # List of phase results
-  structure(x, class = "bat_study_result")
+  structure(x, class = "barts_study_result")
 }
 
 #' @export
-plot.bat_study_result <- function(x, ...) {
+plot.barts_study_result <- function(x, ...) {
   op <- par(no.readonly = TRUE)
   on.exit(suppressWarnings(par(op)))
 

@@ -12,10 +12,10 @@ phase <- function(n, rule) {
 
 new_phase <- function(n, rule) {
   stopifnot(rlang::is_scalar_integer(n), is_rule(rule))
-  structure(list(n = n, rule = rule), class = "bat_phase")
+  structure(list(n = n, rule = rule), class = "barts_phase")
 }
 
-is_phase <- function(x) inherits(x, "bat_phase")
+is_phase <- function(x) inherits(x, "barts_phase")
 
 all_are_phases <- function(x) {
   all(vapply(x, is_phase, logical(1)))
@@ -26,11 +26,11 @@ all_are_phases <- function(x) {
 
 new_phase_result <- function(x, rule) {
   stopifnot(is.list(x), is_rule(rule))
-  structure(x, rule = rule, class = "bat_phase_result")
+  structure(x, rule = rule, class = "barts_phase_result")
 }
 
 #' @export
-plot.bat_phase_result <- function(x, ...) {
+plot.barts_phase_result <- function(x, ...) {
   op <- par(no.readonly = TRUE)
   on.exit(suppressWarnings(par(op)))
 

@@ -24,7 +24,7 @@ arjas_gasbarra <- function(epsilon, epsilon_1, epsilon_2, theta_low, delta, rand
       n = 1L,              # Current position in randomization list
       dropped = integer()  # Indices of permanently dropped arms so far
     ),
-    class = "bat_arjas_gasbarra"
+    class = "barts_arjas_gasbarra"
   )
 }
 
@@ -58,7 +58,7 @@ rule_2 <- function(epsilon, epsilon_1, epsilon_2, theta_low = NA, delta = 0, ran
 # Initialization ----------------------------------------------------------
 
 #' @export
-rule_initialize.bat_arjas_gasbarra <- function(rule, ..., n_max, n_arms) {
+rule_initialize.barts_arjas_gasbarra <- function(rule, ..., n_max, n_arms) {
   if (is.null(rule$parameters$r)) {
     rule$parameters$r <- replicate(n_max, sample(n_arms))
   }
@@ -69,7 +69,7 @@ rule_initialize.bat_arjas_gasbarra <- function(rule, ..., n_max, n_arms) {
 # Evaluation --------------------------------------------------------------
 
 #' @export
-rule_evaluate.bat_arjas_gasbarra <- function(rule, samples) {
+rule_evaluate.barts_arjas_gasbarra <- function(rule, samples) {
   # Determine arm state and statistics based on Arjas & Gasbarra (2021)
   arm_state <- ag_state(rule, samples)
 
@@ -147,7 +147,7 @@ ag_state <- function(rule, samples) {
 # Plotting ----------------------------------------------------------------
 
 #' @export
-plot.bat_arjas_gasbarra <- function(x, ..., xlim = NULL) {
+plot.barts_arjas_gasbarra <- function(x, ..., xlim = NULL) {
   if (!is.null(xlim)) {
     lines(xlim, rep(x$parameters$epsilon, 2), col = "grey", lty = 2)
     lines(xlim, rep(x$parameters$epsilon_2, 2), col = "grey", lty = 1)
