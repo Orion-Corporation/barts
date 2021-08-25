@@ -1,6 +1,6 @@
 Package: barts
 Title: Bayesian Adaptive Rules for Treatment Selection
-Version: 0.0.0.9004
+Version: 0.0.1
 Authors@R: 
     c(person(given = "Mikko",
              family = "Marttila",
