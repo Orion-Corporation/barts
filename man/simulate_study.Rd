@@ -23,7 +23,7 @@ Simulate a study
 \examples{
 # A single-phase study uses the same allocation rule throughout
 simulate_study(
-  single_phase_study(n = 240, rule = epsilon(0.1)),
+  single_phase_study(n = 240, rule = rule_1(epsilon = 0.1)),
   a = 1,
   b = 1,
   theta = 0.2 + 1:4 / 10

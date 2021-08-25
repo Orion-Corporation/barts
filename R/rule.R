@@ -59,7 +59,6 @@ thompson <- function(kappa) {
 
 # Initialization ----------------------------------------------------------
 
-#' @export
 rule_initialize <- function(rule, ...) {
   UseMethod("rule_initialize")
 }

@@ -21,7 +21,7 @@ rule_2(
   epsilon,
   epsilon_1,
   epsilon_2,
-  theta_low,
+  theta_low = NA,
   delta = 0,
   randomization_list = NULL
 )
