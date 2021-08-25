@@ -29,3 +29,5 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+URL: https://github.com/Orion-Corporation/barts
+BugReports: https://github.com/Orion-Corporation/barts/issues
