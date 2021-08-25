@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 # barts
 
 <!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 barts is a companion package to Arjas & Gasbarra (2021). The package implements a number of treatment allocation and selection rules for use in clinical trials, and provides a mechanism to simulate trials to evaluate operating characteristics. Currently, barts only supports binary data with Beta-priors.
