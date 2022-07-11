@@ -1,6 +1,6 @@
 Package: barts
 Title: Bayesian Adaptive Rules for Treatment Selection
-Version: 0.0.1
+Version: 0.0.1.9001
 Authors@R: 
     c(person(given = "Mikko",
              family = "Marttila",
@@ -18,7 +18,7 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 LinkingTo: 
-    cpp11
+    cpp11 (>= 0.4.0)
 SystemRequirements: C++11
 Imports: 
     purrr,

@@ -3,7 +3,7 @@
 // For each column in a matrix of samples, determine the probability
 // that the sample in that column has the highest value on the row.
 [[cpp11::register]]
-cpp11::doubles pr_max_col(cpp11::doubles_matrix m) {
+cpp11::doubles pr_max_col(cpp11::doubles_matrix<> m) {
   int nrow = m.nrow();
   int ncol = m.ncol();
 
