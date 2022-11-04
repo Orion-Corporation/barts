@@ -30,22 +30,21 @@
 #'   b = 1,
 #'   theta = 0.2 + 1:4 / 10
 #' )
-simulate_study <- function(study, theta, a, b, n_draws = 3000) {
+simulate_study <- function(study, model, scenario) {
   UseMethod("simulate_study")
 }
 
 #' @export
-simulate_study.barts_study <- function(study, theta, a, b, n_draws = 3000) {
+simulate_study.barts_study <- function(study, model, scenario) {
   # Track results from each phase
   results <- list()
 
   # Simulate each phase
   for (phase in study$phases) {
-    phase_result <- simulate_phase(phase, theta, a, b, n_draws)
+    phase_result <- simulate_phase(phase, model, scenario)
 
     # Carry over posterior parameters to next phase
-    a <- as.vector(tail(phase_result$a, 1L))
-    b <- as.vector(tail(phase_result$b, 1L))
+    model <- final_model(phase_result)
 
     results <- c(results, list(phase_result))
   }
@@ -54,58 +53,64 @@ simulate_study.barts_study <- function(study, theta, a, b, n_draws = 3000) {
   new_study_result(results)
 }
 
-#' @importFrom zeallot %<-%
-simulate_phase <- function(phase, theta, a, b, n_draws = 3000) {
-  # Validate input parameters
-  c(theta, a, b) %<-% vctrs::vec_recycle_common(theta = theta, a = a, b = b)
+simulate_phase <- function(phase, model, scenario) {
+  steps <- phase_steps(phase)
+  trace <- vector("list", length(steps))
 
-  theta <- vctrs::vec_cast(theta, double(), x_arg = "theta")
-  a <- vctrs::vec_cast(a, double(), x_arg = "a")
-  b <- vctrs::vec_cast(b, double(), x_arg = "b")
+  rule <- phase_rule(phase, scenario)
+  prior <- list(rule = rule, model = model)
 
-  n_draws <- vctrs::vec_cast(n_draws, integer(), x_arg = "n_draws")
+  for (step in steps) {
+    rule <- evaluate(rule, model)
+    A <- allocate(rule, 1) # TODO: Adjustable cohort sizes
+    data <- observe(scenario, A)
+    model <- update(model, data)
 
-  # Initialize list to hold tracked parameters at each step -- one step before
-  # each subject and one after the last to evaluate the posterior in the end.
-  n_steps <- phase$n + 1L
-  trace <- vector("list", n_steps)
-
-  # Initialize allocation rule
-  rule <- rule_initialize(phase$rule, n_max = n_steps, n_arms = length(theta))
-
-  for (i in seq_len(n_steps)) {
-    # Draw samples from posterior
-    posterior_samples <- mapply(stats::rbeta, n_draws, a, b)
-
-    # Evaluate treatment allocation rule
-    rule <- rule_evaluate(rule, posterior_samples)
-
-    # Save tracked parameters
-    trace[[i]] <- c(list(a = a, b = b), rule$result)
-
-    if (i > phase$n) {
-      break # Stop before observing more data at last step
-    }
-
-    A <- rule_next_allocation(rule)
-
-    # Observe data
-    d <- rbern(1L, theta[A])
-
-    # Update parameters
-    a[A] <- a[A] + sum(d)
-    b[A] <- b[A] + sum(1 - d)
-
-    # Save observed data
-    trace[[i]][["data"]] <- new_data_frame(list(A = A, d = d), nrow = 1L)
+    # Keep track of results
+    trace[[step]] <- list(rule = rule, data = data, model = model)
   }
 
-  # Combine parameters into matrices across steps
-  results <- lapply(purrr::transpose(trace), rbindlist)
-
-  new_phase_result(results, rule = rule)
+  new_phase_result(trace, prior = prior)
 }
 
-rbindlist <- function(x) {
-  do.call("rbind", x)
+phase_steps <- function(phase) {
+  seq_len(phase$n)
+}
+
+phase_rule <- function(phase, scenario) {
+
+}
+
+
+observe <- function(scenario, ...) {
+  UseMethod("observe")
+}
+
+observe.barts_scenario_bernoulli <- function(scenario, allocations, ...) {
+  thetas <- scenario$params$theta
+  Map(function(n, theta) {
+    new_data_frame(
+      list(
+        x = as.integer(rbern(n, theta)),
+        n = rep_len(1L, n)
+      ),
+      nrow = n
+    )
+  }, tabulate(allocations, length(thetas)), thetas)
+}
+
+scenario_bernoulli <- function(theta) {
+  new_scenario(params = list(theta = theta), class = "barts_scenario_bernoulli")
+}
+
+new_scenario <- function(params, class = character()) {
+  structure(list(params = params), class = c(class, "barts_scenario"))
+}
+
+allocate <- function(rule, n) {
+  rule_next_allocation(rule)
+}
+
+evaluate <- function(rule, model) {
+  p <- predict_best_arm(model)
 }
